@@ -4,8 +4,8 @@
 
 ### Environment variables
 
-| Variable      | Beschreibung                                                 |
-| ------------- | ------------------------------------------------------------ |
+| Variable      | Description                                                  |
+| :------------ | :----------------------------------------------------------- |
 | NEEO_BRAIN_IP | IP-Address of Neeo Brain                                     |
 | BRAVIA_IP     | IP-Address of the Sony Bravia TV                             |
 | BRAVIA_PORT   | Port of the Sony Bravia TV                                   |
