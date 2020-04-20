@@ -25,7 +25,6 @@
     "bravia": "^1.3.0",
     "chai": "^4.2.0",
     "mocha": "^7.1.1",
-    "nano-cache": "^1.1.2",
     "node-persist": "^3.0.5",
     "node-ssdp": "^4.0.0",
     "request": "^2.88.2",
