@@ -54,8 +54,8 @@ it('PersistencyCacheManager test DeviceStorageAndCache (RegisteredDevices)', fun
 it('PersistencyCacheManager test AddingDevice (DiscoveredDevices)', function(done) {
     PersistencyCacheManager.addDiscoveredDevice(device1.id.toString(), device1);
     PersistencyCacheManager.addDiscoveredDevice(device2.id.toString(), device2);
-    const stats = PersistencyCacheManager.DiscoveredCache.stats();
-    expect(stats.count).to.equal(2);
+    const cacheSize = PersistencyCacheManager.getDiscoveredCacheSize();
+    expect(cacheSize).to.equal(2);
 
     const expected1 = PersistencyCacheManager.getDiscoveredDevice(device1.id.toString());
     const expected2 = PersistencyCacheManager.getDiscoveredDevice(device2.id.toString());
