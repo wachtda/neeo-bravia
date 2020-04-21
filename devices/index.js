@@ -28,12 +28,12 @@ function buildDevice() {
         console.debug('add button with key: \'' + key + '\' and label: \'' + value.label + '\'');
         device.addButton({name: key, label: value.label });
     }
-    device.addButtonHander(braviaController.braviaButtonPressed);
-    device.registerInitialiseFunction(braviaController.init);
+    device.addButtonHandler(braviaController.braviaButtonPressed);
     device.registerDeviceSubscriptionHandler (
         {
             deviceAdded: (deviceId) => braviaController.registerDevice(deviceId),
-            deviceRemoved: (deviceId) => braviaController.deRegisterDevice(deviceId)
+            deviceRemoved: (deviceId) => braviaController.deRegisterDevice(deviceId),
+            initializeDeviceList: (deviceIds) => console.debug('existing devices', deviceIds),
         }
     );
     device.enableRegistration(
@@ -56,9 +56,13 @@ function buildDevice() {
             enableDynamicDeviceBuilder: false,
         },
         function(optionalDeviceId) {
-            return braviaController.discoveredDevices();
+            const devices = braviaController.discoveredDevices();
+            console.debug('loaded devices for discovery');
+            return devices;
         }
     );
+    device.registerInitialiseFunction(braviaController.init);
+    //braviaController.init();
     return device;
 }
 module.exports = {
