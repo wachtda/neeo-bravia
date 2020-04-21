@@ -8,7 +8,9 @@
   "private": false,
   "dependencies": {
     "neeo-sdk": "^0.53.8",
-    "sony-bravia-tv-remote": "^2.0.0"
+    "sony-bravia-tv-remote": "^2.0.0",
+    "bravia": "^1.3.0",
+    "node-persist": "^3.0.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,15 +23,9 @@
     "url": "https://github.com/wachtda/neeo-bravia.git"
   },
   "devDependencies": {
-    "bluebird": "^3.7.2",
-    "bravia": "^1.3.0",
     "chai": "^4.2.0",
     "mocha": "^7.1.1",
-    "node-cache": "^5.1.0",
-    "node-persist": "^3.0.5",
-    "node-ssdp": "^4.0.0",
     "nyc": "^15.0.1",
-    "request": "^2.88.2",
     "xml2js": "^0.4.23"
   }
 }
