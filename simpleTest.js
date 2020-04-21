@@ -4,7 +4,7 @@ const neeoApi = require('neeo-sdk');
 const braviaSettings = {
   ip: '10.0.0.56',
   port: 80,
-  token: '3028'
+  token: '0000'
 };
 
 const BraviaRemoteControl  = require('sony-bravia-tv-remote');
