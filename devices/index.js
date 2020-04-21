@@ -4,6 +4,16 @@ const braviaController = require('../lib/braviaController');
 const adapterName = 'Bravia TV IP-Controller';
 const driverVersion = 1;
 
+const registrationInstructions = {
+    headerText: 'Enter Preshared pairing key',
+    description: 'To establish a connection to the Sony Bravia, you need to create a preshared pairing key on your Bravia TV. '
+};
+
+const discoveryInstructions = {
+    headerText: 'Sony Bravia IP-Controller integration',
+    description: 'Compatible Sony Bravia TVs are auto discovered in your local network. Press Next when ready, to select your device.'
+};
+
 console.log('Initialize Neeo Adapter: ' + adapterName + '(Version: ' + driverVersion + ')');
 console.log('-------------------------------------------------');
 
@@ -23,31 +33,29 @@ function buildDevice() {
     device.registerDeviceSubscriptionHandler (
         {
             deviceAdded: (deviceId) => braviaController.registerDevice(deviceId),
-            deviceRemoved: (deviceId) => braviaController.deRegisterDevice(deviceId),
-            initializeDeviceList: (deviceIds) => console.debug('existing devices', deviceIds),
+            deviceRemoved: (deviceId) => braviaController.deRegisterDevice(deviceId)
         }
     );
     device.enableRegistration(
         {
             type: 'SECURITY_CODE',
-            headerText: 'DEVICE REGISTRATION',
-            description: 'Please enter the pairing code of your device',
+            headerText: registrationInstructions.headerText,
+            description: registrationInstructions.description,
         },
         {
             register: (securityCode) => {
-                console.log ('Code', securityCode);
+                console.debug ('Preshared auth key:', securityCode);
                 braviaController.addDeviceCode(securityCode)},
-            isRegistered: () => {console.log('isRegistered')},
+            isRegistered: () => { console.debug('isRegistered') },
         }
     );
     device.enableDiscovery(
         {
-            headerText: 'Sony Bravia IP-Controller integration',
-            description: 'Compatible Sony Bravia TVs are auto discovered in your local network. Press Next when ready, to select your device. ',
+            headerText: discoveryInstructions.headerText,
+            description: discoveryInstructions.description ,
             enableDynamicDeviceBuilder: false,
         },
         function(optionalDeviceId) {
-            console.log('optionalDeviceId: ' + optionalDeviceId);
             return braviaController.discoveredDevices();
         }
     );
