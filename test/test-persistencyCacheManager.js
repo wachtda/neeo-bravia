@@ -38,18 +38,42 @@ it('test discovered devices cache', function(done) {
     const devicesSize = PersistencyCacheManager.getDiscoveredDevices().size;
     expect(devicesSize).to.equal(2);
 
-    const expected1 = PersistencyCacheManager.getDiscoveredDevice(device1.id.toString());
-    const expected2 = PersistencyCacheManager.getDiscoveredDevice(device2.id.toString());
-    expect(expected1.id).to.equal(device1.id);
-    expect(expected2.id).to.equal(device2.id);
-    done();
+    let expected1;
+    let expected2;
+    const promise1 = PersistencyCacheManager.getDiscoveredDevice(device1.id.toString()).then((device) => { expected1 = device });
+    const promise2 = PersistencyCacheManager.getDiscoveredDevice(device2.id.toString()).then((device) => { expected2 = device });
+    Promise.all([promise1, promise2]).then(() => {
+        expect(expected1.id).to.equal(device1.id);
+        expect(expected2.id).to.equal(device2.id);
+        done();
+    });
 });
 
-it('test registered devices cache and storage', function(done) {
-    PersistencyCacheManager.addRegisteredDevice(device1.id.toString(), device1);
-    PersistencyCacheManager.addRegisteredDevice(device2.id.toString(), device2);
-    const cacheSize = PersistencyCacheManager.getRegisteredCacheSize();
-    expect(cacheSize).to.equal(2);
+it('test registered devices cache and storage', () => {
+    const promiseReg1 = PersistencyCacheManager.addRegisteredDevice(device1.id.toString(), device1);
+    const promiseReg2 = PersistencyCacheManager.addRegisteredDevice(device2.id.toString(), device2);
+    const promise0 = Promise.all([promiseReg1, promiseReg2]).then(() => {
+        const cacheSize = PersistencyCacheManager.getRegisteredCacheSize();
+        expect(cacheSize).to.equal(2);
+    });
+
+    let expected1;
+    let expected2;
+    const promise1 = PersistencyCacheManager.getRegisteredDevice(device1.id.toString()).then((device) => { expected1 = device });
+    const promise2 = PersistencyCacheManager.getRegisteredDevice(device2.id.toString()).then((device) => { expected2 = device });
+    return Promise.all([promise0, promise1, promise2]).then(() => {
+        expect(expected1.id).to.equal(device1.id);
+        expect(expected2.id).to.equal(device2.id);
+    });
+});
+
+it('test registered devices cache and storage failure', function(done) {
+    const promiseReg1 = PersistencyCacheManager.addRegisteredDevice(device1.id.toString(), device1);
+    const promiseReg2 = PersistencyCacheManager.addRegisteredDevice(device2.id.toString() + '_null', null);
+    Promise.all([promiseReg1, promiseReg2]).then(() => {
+        const cacheSize = PersistencyCacheManager.getRegisteredCacheSize();
+        expect(cacheSize).to.equal(1);
+    }).catch((error) => { expect(error).to.equal('registered device cannot be null') });
 
     let expected1;
     let expected2;
@@ -57,29 +81,31 @@ it('test registered devices cache and storage', function(done) {
     const promise2 = PersistencyCacheManager.getRegisteredDevice(device2.id.toString()).then((device) => { expected2 = device });
     Promise.all([promise1, promise2]).then(() => {
         expect(expected1.id).to.equal(device1.id);
-        expect(expected2.id).to.equal(device2.id);
-        done();
-    })
+    }).catch(() => {
+        expect(expected2).to.equal(null);
+    }).finally(done());
 });
 
-it('test registered devices storage only', function(done) {
-    PersistencyCacheManager.addRegisteredDevice(device1.id.toString(), device1);
-    PersistencyCacheManager.addRegisteredDevice(device2.id.toString(), device2);
-    const cacheSizeBefore = PersistencyCacheManager.getRegisteredCacheSize();
-    expect(cacheSizeBefore).to.equal(2);
-    PersistencyCacheManager.getRegisteredDevices().clear();
-    const cacheSizeAfter = PersistencyCacheManager.getRegisteredCacheSize();
-    expect(cacheSizeAfter).to.equal(0);
+it('test registered devices storage only', () => {
+    const promiseReg1 = PersistencyCacheManager.addRegisteredDevice(device1.id.toString(), device1);
+    const promiseReg2 = PersistencyCacheManager.addRegisteredDevice(device2.id.toString(), device2);
+    const promise0 = Promise.all([promiseReg1, promiseReg2]).then(() => {
+        const cacheSize = PersistencyCacheManager.getRegisteredCacheSize();
+        expect(cacheSize).to.equal(2);
+
+        PersistencyCacheManager.getRegisteredDevices().clear();
+        const cacheSizeAfter = PersistencyCacheManager.getRegisteredCacheSize();
+        expect(cacheSizeAfter).to.equal(0);
+    })
 
     let expected1;
     let expected2;
     const promise1 = PersistencyCacheManager.getRegisteredDevice(device1.id.toString()).then((device) => { expected1 = device });
     const promise2 = PersistencyCacheManager.getRegisteredDevice(device2.id.toString()).then((device) => { expected2 = device });
-    Promise.all([promise1, promise2]).then(() => {
+    return Promise.all([promise0, promise1, promise2]).then(() => {
         expect(expected1.id).to.equal(device1.id);
         expect(expected2.id).to.equal(device2.id);
-        done();
-    })
+    });
 });
 
 it('test removing of registered device', function (done) {
