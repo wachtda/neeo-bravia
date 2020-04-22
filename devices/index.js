@@ -1,4 +1,5 @@
 'use strict';
+const logger = require('../lib/logger');
 const neeoAPI = require('neeo-sdk');
 const braviaController = require('../lib/braviaController');
 const adapterName = 'Bravia TV IP-Controller';
@@ -14,8 +15,8 @@ const discoveryInstructions = {
     description: 'Compatible Sony Bravia TVs are auto discovered in your local network. Press Next when ready, to select your device.'
 };
 
-console.log('Initialize Neeo Adapter: ' + adapterName + '(Version: ' + driverVersion + ')');
-console.log('-------------------------------------------------');
+logger.info('Initialize Neeo Adapter: ' + adapterName + '(Version: ' + driverVersion + ')');
+logger.info('-------------------------------------------------');
 
 function buildDevice() {
     let device = neeoAPI.buildDevice(adapterName);
@@ -23,9 +24,9 @@ function buildDevice() {
     device.setManufacturer('Sony')
         .addAdditionalSearchToken('Bravia REST-API')
         .setType('TV');
-    console.log('- initialize buttons');
+    logger.info('- initialize buttons');
     for (let [key, value] of braviaController.tvButtonMappings) {
-        console.debug('add button with key: \'' + key + '\' and label: \'' + value.label + '\'');
+        logger.debug('add button with key: \'' + key + '\' and label: \'' + value.label + '\'');
         device.addButton({name: key, label: value.label });
     }
     device.addButtonHandler(braviaController.braviaButtonPressed);
@@ -33,7 +34,7 @@ function buildDevice() {
         {
             deviceAdded: (deviceId) => braviaController.registerDevice(deviceId),
             deviceRemoved: (deviceId) => braviaController.deRegisterDevice(deviceId),
-            initializeDeviceList: (deviceIds) => console.debug('existing devices', deviceIds),
+            initializeDeviceList: (deviceIds) => logger.debug('existing devices', deviceIds),
         }
     );
     device.enableRegistration(
@@ -44,9 +45,9 @@ function buildDevice() {
         },
         {
             register: (securityCode) => {
-                console.debug ('Preshared auth key:', securityCode);
+                logger.debug ('Preshared auth key:', securityCode);
                 braviaController.addDeviceCode(securityCode)},
-            isRegistered: () => { console.debug('isRegistered') },
+            isRegistered: () => { logger.debug('isRegistered') },
         }
     );
     device.enableDiscovery(
@@ -57,7 +58,7 @@ function buildDevice() {
         },
         function(optionalDeviceId) {
             const devices = braviaController.discoveredDevices();
-            console.debug('loaded devices for discovery');
+            logger.debug('loaded devices for discovery');
             return devices;
         }
     );
