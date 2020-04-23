@@ -15,7 +15,7 @@ const discoveryInstructions = {
     description: 'Compatible Sony Bravia TVs are auto discovered in your local network. Press Next when ready, to select your device.'
 };
 
-logger.info('Initialize Neeo Adapter: ' + adapterName + '(Version: ' + driverVersion + ')');
+logger.info('Initialize Neeo Adapter: ' + adapterName + ' (Version: ' + driverVersion + ')');
 logger.info('-------------------------------------------------');
 
 function buildDevice() {
