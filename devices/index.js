@@ -1,6 +1,7 @@
 'use strict';
 const logger = require('../lib/logger');
 const neeoAPI = require('neeo-sdk');
+const buttonConfig = require('../lib/buttonConfig');
 const braviaController = require('../lib/braviaController');
 const adapterName = 'Bravia TV IP-Controller';
 const driverVersion = 1;
@@ -25,7 +26,8 @@ function buildDevice() {
         .addAdditionalSearchToken('Bravia REST-API')
         .setType('TV');
     logger.info('- initialize buttons');
-    for (let [key, value] of braviaController.tvButtonMappings) {
+    buttonConfig.initvButtonMappingsFromConfig();
+    for (let [key, value] of buttonConfig.tvButtonsMapping) {
         logger.debug('add button with key: \'' + key + '\' and label: \'' + value.label + '\'');
         device.addButton({name: key, label: value.label });
     }
