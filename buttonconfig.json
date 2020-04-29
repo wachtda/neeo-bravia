@@ -2,5 +2,16 @@
   { "button": "POWER ON", "label": "Power On", "func": "PowerOn" },
   { "button": "POWER OFF", "label": "Power Off", "func": "PowerOff" },
   { "button": "CURSOR LEFT", "label": "Left", "func": "Left" },
+  { "button": "CURSOR RIGHT", "label": "Right", "func": "Right" },
+  { "button": "CURSOR DOWN", "label": "Down", "func": "Down" },
+  { "button": "CURSOR UP", "label": "Up", "func": "Up" },
+  { "button": "CURSOR ENTER", "label": "Enter", "func": "Enter" },
+  { "button": "MUTE TOGGLE", "label": "Mute", "func": "Mute" },
+  { "button": "VOLUME UP", "label": "Volume Up", "func": "VolumeUp" },
+  { "button": "VOLUME DOWN", "label": "Volume Down", "func": "VolumeDown" },
+  { "button": "CHANNEL UP", "label": "Channel Up", "func": "ChannelUp" },
+  { "button": "CHANNEL DOWN", "label": "Channel Down", "func": "ChannelDown" },
+
+
   { "button": "DISNEY", "label": "Disney+", "app": "com.sony.dtv.com.disney.disneyplus.com.bamtechmedia.dominguez.main.MainActivity" }
 ]
